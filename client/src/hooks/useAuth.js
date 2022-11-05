@@ -103,9 +103,11 @@ function useProvideAuth() {
         console.log("loggedin");
         setUser(user);
         setLoggedIn(true);
+        setError(null);
       } else {
         setUser(false);
         setLoggedIn(false);
+        setError(null);
       }
     });
     // Cleanup subscription on unmount
