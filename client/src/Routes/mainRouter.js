@@ -7,6 +7,7 @@ import { element } from "prop-types";
 import Routes from "../Utils/routes";
 import AboutUs from "../pages/AboutUs/AboutUs";
 import OurMission from "../pages/OurMission/OurMission";
+import { CreateProduct } from "../containers/CreateProductFrom/CreateProduct";
 const router = [
   {
     path: Routes.HOME,
@@ -27,6 +28,10 @@ const router = [
   {
     path: Routes.OURMISSION,
     element: <OurMission />,
+  },
+  {
+    path: Routes.CREATEPRODUCT,
+    element: <CreateProduct />,
   },
 ];
 
