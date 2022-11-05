@@ -1,3 +1,8 @@
 node_modules/
 client/node_modules/
 .idea/*
+server.bak
+foodsearch-927fe-firebase-adminsdk-tyvp5-bbd994002f.json
+.env
+__pycache__
+~
