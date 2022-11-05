@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -14,14 +14,35 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Logo } from "../../components/Logo/Logo";
 import { Link as RouterLink } from "react-router-dom";
-
+  import { MenuItem } from "@mui/material";
 
 const theme = createTheme();
 
 const cate = ['Fruit', 'VEGETABLES', 'SALAD_AND_HERBS', 'MEAT_AND_POULTRY','FISH_AND_SEAFOOD',
 'MILK_AND_EGGS','YOGHURTS','DESERTS','BAKERY','READY_MEALS'];
-
+const currencies = [
+    {
+      value: 'USD',
+      label: '$',
+    },
+    {
+      value: 'EUR',
+      label: '€',
+    },
+    {
+      value: 'BTC',
+      label: '฿',
+    },
+    {
+      value: 'JPY',
+      label: '¥',
+    },
+  ];
+  
 export const CreateProduct = () => {
+    const [inputType,setInputType] = useState("date");
+    const [selectedCategory,setSelectedCategory] = useState(cate[0]);
+    console.log(inputType)
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -75,14 +96,18 @@ export const CreateProduct = () => {
                 fullWidth
                 id="category"
                 label="Catagory"
-                select="value={values.cate} onChange={set('cate')}>
-                <option value=''>Select category</option>
-                {cate.map(c => <option key={c}>{c}</option>)}"
-                name="category"
+                select
+                value={selectedCategory}
+                    name="category"
+                onChange={(e) => setSelectedCategory(e.target.value)}
                 autoComplete="category"
                 autoFocus
-                />
-                
+                >   {currencies.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </TextField>
                 <TextField
                 margin="normal"
                 required
@@ -95,11 +120,16 @@ export const CreateProduct = () => {
                 />
 
                 <TextField
+                label="Expiry-date"
+                onFocus={()=>{setInputType('date')}}
+                onBlur={() =>{setInputType('text')}}
+                type={inputType}
                 margin="normal"
+                
                 required
                 fullWidth
                 id="expirydate"
-                label="Expiry-date"
+                
                 name="expirydate"
                 autoComplete="expirydate"
                 autoFocus
