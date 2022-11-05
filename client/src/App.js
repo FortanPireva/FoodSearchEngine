@@ -1,13 +1,22 @@
 import logo from "./logo.svg";
 import "./App.css";
-import { RouterProvider } from "react-router-dom";
-import router from "./Routes/mainRouter";
+import { RouterProvider, Routes, Route } from "react-router-dom";
 import Layout from "./containers/Layout/Layout";
+import Home from "./pages/Home/Home";
+import ErrorPage from "./pages/Error/ErrorPage";
+import router from "./Routes/mainRouter";
 function App() {
   return (
-    <Layout>
-      <RouterProvider router={router}></RouterProvider>
-    </Layout>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        {router.map((route, i) => {
+          return (
+            <Route index={i == 0} path={route.path} element={route.element} />
+          );
+        })}
+        <Route path="*" element={<ErrorPage />} />
+      </Route>
+    </Routes>
   );
 }
 
