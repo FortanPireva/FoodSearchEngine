@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
+from typing import List, Optional
 
-from server.app.domain.product import Product
+from domain.product import Product
 
 
 class UserRepositoryAbstract(ABC):
@@ -9,9 +10,11 @@ class UserRepositoryAbstract(ABC):
 
 class ProductRepositoryAbstract(ABC):
     @abstractmethod
-    def get_products(self, search_query: str):
+    async def get_products(
+        self, search_query: Optional[str] = None, skip: int = 0, limit: int = 10
+    ) -> List[Product]:
         pass
 
     @abstractmethod
-    def create_product(self, product: Product):
+    async def create_product(self, product: Product):
         pass

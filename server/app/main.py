@@ -1,5 +1,5 @@
-from server.app.api.endpoints.products import router as products_router
-from server.app.config import app_settings
+from api.endpoints.products import router as products_router
+from config import app_settings
 
 from fastapi import FastAPI
 
