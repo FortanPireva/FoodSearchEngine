@@ -102,7 +102,8 @@ export const CreateProduct = () => {
                 onChange={(e) => setSelectedCategory(e.target.value)}
                 autoComplete="category"
                 autoFocus
-                >   {currencies.map((option) => (
+                >
+                    {currencies.map((option) => (
                     <option key={option.value} value={option.value}>
                       {option.label}
                     </option>
