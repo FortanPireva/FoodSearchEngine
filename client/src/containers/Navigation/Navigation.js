@@ -17,12 +17,13 @@ import menuLinks from "../../Utils/menuLinks";
 import AppButton from "../../components/AppButton/AppButton";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function Navigation() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const [isLoggedIn, setLoggedIn] = useState(false);
+  const { loggedIn, signout } = useAuth();
   const navigate = useNavigate();
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -33,13 +34,16 @@ function Navigation() {
 
   const handleCloseNavMenu = (element) => {
     setAnchorElNav(null);
-
+    console.log(element);
     if (element) {
       navigate(element.path);
     }
   };
 
-  const handleCloseUserMenu = () => {
+  const handleCloseUserMenu = (element) => {
+    console.log(element);
+    if (element == "Logout") signout().then(() => navigate("/login"));
+
     setAnchorElUser(null);
   };
 
@@ -136,7 +140,7 @@ function Navigation() {
               </Button>
             ))}
           </Box>
-          {isLoggedIn ? (
+          {loggedIn ? (
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -160,7 +164,10 @@ function Navigation() {
                 onClose={handleCloseUserMenu}
               >
                 {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                  <MenuItem
+                    key={setting}
+                    onClick={() => handleCloseUserMenu(setting)}
+                  >
                     <Typography textAlign="center">{setting}</Typography>
                   </MenuItem>
                 ))}
