@@ -6,7 +6,8 @@ const Routes = {
   RESETPASSWORD: "/reset-password",
   ABOUTUS: "/about-us",
   OURMISSION: "/our-mission",
-  CREATEPRODUCT:"/create-product"
+  CREATEPRODUCT: "/create-product",
+  NOTFOUND: "/not-found",
 };
 
 export default Routes;
