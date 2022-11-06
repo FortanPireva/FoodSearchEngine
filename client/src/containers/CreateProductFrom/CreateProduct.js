@@ -14,15 +14,8 @@ import { useAuth } from "../../hooks/useAuth";
 import Routes from "../../Utils/routes";
 import { useProducts } from "../../hooks/useProducts";
 import { ProductModel } from "../../models/ProductModel";
+import productCategories from "../../Utils/productCategories";
 const theme = createTheme();
-
-const cate = [
-  "MEAT_AND_POULTRY",
-  "FISH_AND_SEAFOOD",
-  "MILK_AND_EGGS",
-  "YOGHURTS",
-  "READY_MEALS",
-];
 
 export const CreateProduct = () => {
   const { loggedIn, user } = useAuth();
@@ -104,7 +97,7 @@ export const CreateProduct = () => {
               autoComplete="category"
               autoFocus
             >
-              {cate.map((option) => (
+              {productCategories.map((option) => (
                 <option key={option} value={option}>
                   {option}
                 </option>

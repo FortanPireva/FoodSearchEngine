@@ -7,9 +7,12 @@ import Box from "@mui/material/Box";
 import { useProducts } from "../../hooks/useProducts";
 import { useState, useEffect } from "react";
 import { ProductModel } from "../../models/ProductModel";
+import AppButton from "../../components/AppButton/AppButton";
+import CustomModal from "../../components/Modal/Modal";
 const Home = () => {
   const { getLatestProducts } = useProducts();
   const [products, setProducts] = useState([]);
+  const [showModal, setShowModal] = useState(false);
   useEffect(() => {
     let tempProducts = [];
     getLatestProducts().then((products) => {
@@ -26,6 +29,19 @@ const Home = () => {
     >
       <Search />
 
+      {showModal && (
+        <CustomModal open={showModal} onClose={() => setShowModal(false)} />
+      )}
+
+      <Grid container justifyContent="center">
+        <AppButton
+          variant="text"
+          color="primary"
+          onClick={() => setShowModal(true)}
+        >
+          Get Notified
+        </AppButton>
+      </Grid>
       <Grid
         container
         alignItems="center"
