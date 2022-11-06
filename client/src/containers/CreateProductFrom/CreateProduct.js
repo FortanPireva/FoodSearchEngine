@@ -20,28 +20,10 @@ const theme = createTheme();
 
 const cate = ['Fruit', 'VEGETABLES', 'SALAD_AND_HERBS', 'MEAT_AND_POULTRY','FISH_AND_SEAFOOD',
 'MILK_AND_EGGS','YOGHURTS','DESERTS','BAKERY','READY_MEALS'];
-const currencies = [
-    {
-      value: 'USD',
-      label: '$',
-    },
-    {
-      value: 'EUR',
-      label: '€',
-    },
-    {
-      value: 'BTC',
-      label: '฿',
-    },
-    {
-      value: 'JPY',
-      label: '¥',
-    },
-  ];
   
 export const CreateProduct = () => {
     const [inputType,setInputType] = useState("date");
-    const [selectedCategory,setSelectedCategory] = useState(cate[0]);
+    const [selectedCategory,setSelectedCategory] = useState("");
     console.log(inputType)
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -103,9 +85,9 @@ export const CreateProduct = () => {
                 autoComplete="category"
                 autoFocus
                 >
-                    {currencies.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
+                     {cate.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
                     </option>
                   ))}
                 </TextField>
