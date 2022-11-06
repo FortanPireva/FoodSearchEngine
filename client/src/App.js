@@ -5,8 +5,31 @@ import Layout from "./containers/Layout/Layout";
 import Home from "./pages/Home/Home";
 import ErrorPage from "./pages/Error/ErrorPage";
 import router from "./Routes/mainRouter";
+import { useState, useEffect } from "react";
+import Firebase from "./firebase/firebase";
+import ReactLoading from "react-loading";
+import { Grid } from "@mui/material";
+import { useProducts } from "./hooks/useProducts";
 function App() {
-  return (
+  const [initialized, setInitialized] = useState(false);
+  useEffect(() => {
+    if (!initialized) {
+      const firebase = Firebase.instance;
+      setTimeout(() => {
+        setInitialized(true);
+      }, 500);
+    }
+  }, []);
+  return !initialized ? (
+    <Grid
+      container
+      justifyContent="center"
+      alignItems="center"
+      height={"100vh"}
+    >
+      <ReactLoading color="#000" />
+    </Grid>
+  ) : (
     <Routes>
       <Route path="/" element={<Layout />}>
         {router.map((route, i) => {
