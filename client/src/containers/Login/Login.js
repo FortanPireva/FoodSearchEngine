@@ -8,15 +8,24 @@ import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Logo } from "../../components/Logo/Logo";
-import { Link as RouterLink } from "react-router-dom";
-const theme = createTheme();
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
+import Routes from "../../Utils/routes";
 
+const theme = createTheme();
 export default function Login() {
+  const { loggedIn, error, signin } = useAuth();
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    if (loggedIn) {
+      navigate(Routes.HOME);
+    }
+  }, [loggedIn]);
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -24,6 +33,14 @@ export default function Login() {
       email: data.get("email"),
       password: data.get("password"),
     });
+
+    let email = data.get("email");
+    let password = data.get("password");
+    signin(email, password)
+      .then((user) => {
+        if (user) navigate(Routes.HOME);
+      })
+      .catch((err) => {});
   };
 
   return (
@@ -70,6 +87,7 @@ export default function Login() {
               id="password"
               autoComplete="current-password"
             />
+            {error && <Typography color={"#ff0000"}>{error}</Typography>}
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"

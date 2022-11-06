@@ -14,16 +14,35 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Logo } from "../../components/Logo/Logo";
 import { Link as RouterLink } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import Routes from "../../Utils/routes";
 const theme = createTheme();
 
 export default function Register() {
+  const { signup, error } = useAuth();
+  const navigate = useNavigate();
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
       email: data.get("email"),
       password: data.get("password"),
+      firstName: data.get("firstName"),
+      lastName: data.get("lastName"),
     });
+
+    signup(
+      data.get("email"),
+      data.get("password"),
+      data.get("firstName"),
+      data.get("lastName")
+    )
+      .then((user) => {
+        navigate(Routes.LOGIN);
+      })
+      .catch((err) => {});
   };
 
   return (
@@ -94,6 +113,8 @@ export default function Register() {
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             /> */}
+            {error && <Typography color={"#ff0000"}>{error}</Typography>}
+
             <Button
               type="submit"
               fullWidth
