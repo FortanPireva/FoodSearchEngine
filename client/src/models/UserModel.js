@@ -9,6 +9,7 @@ export class UserModel {
     this.photoURL = user.photoURL ?? "";
     this.firstName = user.firstName;
     this.lastName = user.lastName;
+    this.phoneNumber = user.phoneNumber;
   }
 
   async save() {
@@ -18,6 +19,7 @@ export class UserModel {
       lastName: this.lastName,
       photoURL: this.photoURL,
       email: this.email,
+      phoneNumber: this.phoneNumber,
     });
     return this;
   }
