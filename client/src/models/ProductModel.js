@@ -1,5 +1,6 @@
 export class ProductModel {
   constructor(data = {}) {
+    this.id = null;
     this.image = null;
     this.title = null;
     this.description = null;

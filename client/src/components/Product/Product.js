@@ -12,8 +12,7 @@ import {
   Typography,
 } from "@mui/material";
 import { ArrowDropDown } from "@mui/icons-material";
-import { maxHeight } from "@mui/system";
-
+import { useNavigate } from "react-router-dom";
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
@@ -26,6 +25,7 @@ const ExpandMore = styled((props) => {
 }));
 
 const Product = (props) => {
+  const navigate = useNavigate();
   const [expanded, setExpanded] = React.useState(false);
 
   function handleExpandClick() {
@@ -33,7 +33,10 @@ const Product = (props) => {
   }
 
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card
+      sx={{ maxWidth: 345 }}
+      onClick={() => navigate(`/products/${props.productData.id}`)}
+    >
       <CardHeader title={props.productData.title} />
       <CardMedia
         component={"img"}

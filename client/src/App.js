@@ -10,6 +10,7 @@ import Firebase from "./firebase/firebase";
 import ReactLoading from "react-loading";
 import { Grid } from "@mui/material";
 import { useProducts } from "./hooks/useProducts";
+import { ProductDetails } from "./containers/ProductDetails/ProductDetails";
 function App() {
   const [initialized, setInitialized] = useState(false);
   useEffect(() => {
@@ -37,6 +38,7 @@ function App() {
             <Route index={i == 0} path={route.path} element={route.element} />
           );
         })}
+        <Route path="/products/:productId" element={<ProductDetails />} />
         <Route path="*" element={<ErrorPage />} />
       </Route>
     </Routes>

@@ -8,6 +8,7 @@ import Routes from "../Utils/routes";
 import AboutUs from "../pages/AboutUs/AboutUs";
 import OurMission from "../pages/OurMission/OurMission";
 import { CreateProduct } from "../containers/CreateProductFrom/CreateProduct";
+import ErrorPage from "../pages/Error/ErrorPage";
 const router = [
   {
     path: Routes.HOME,
@@ -32,6 +33,10 @@ const router = [
   {
     path: Routes.CREATEPRODUCT,
     element: <CreateProduct />,
+  },
+  {
+    path: Routes.NOTFOUND,
+    element: <ErrorPage />,
   },
 ];
 

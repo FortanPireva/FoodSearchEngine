@@ -14,6 +14,8 @@ import {
   query,
   limit,
   orderBy,
+  getDoc,
+  doc,
 } from "firebase/firestore";
 const firebase = Firebase.instance;
 
@@ -55,6 +57,26 @@ function useProvideProduct() {
       return false;
     }
   }
+
+  async function getProduct(productId) {
+    try {
+      console.log(productId);
+      const productReference = await getDoc(
+        doc(firebase.firestore(), "products", productId)
+      );
+      console.log(productReference);
+      if (productReference.exists()) {
+        let product = {
+          id: productReference.id,
+          ...productReference.data(),
+        };
+        return product;
+      }
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
   async function getLatestProducts(settings) {
     let limitSize = 10;
     if (settings) {
@@ -79,6 +101,7 @@ function useProvideProduct() {
   // Return the user object and auth methods
   return {
     getLatestProducts,
+    getProduct,
     addProduct,
   };
 }
