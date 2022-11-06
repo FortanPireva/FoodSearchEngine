@@ -47,6 +47,7 @@ export const CreateProduct = () => {
             title: data.get("name"),
             category: data.get("category"),
             expDate: data.get("expirydate"),
+            description: data.get("description"),
             price: data.get("price"),
             userId: user.uid,
         });
@@ -111,6 +112,18 @@ export const CreateProduct = () => {
                                 </option>
                             ))}
                         </TextField>
+
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="description"
+                            label="Product Description"
+                            name="description"
+                            autoComplete="description"
+                            autoFocus
+                        />
+
                         <TextField
                             margin="normal"
                             required
