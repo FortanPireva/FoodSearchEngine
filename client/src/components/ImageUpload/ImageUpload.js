@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {getStorage, uploadBytes, ref} from "firebase/storage"
+import {getStorage, uploadBytesResumable, ref, getDownloadURL} from "firebase/storage"
 import Firebase from "../../firebase/firebase";
 
 const firebase = Firebase.instance;
@@ -7,11 +7,41 @@ export const ImageUpload = () => {
     const [selectedImage, setSelectedImage] = useState(null);
 
     useEffect(() => {
-            const storage = getStorage();
-            const storageRef = ref(storage, 'some-child');
-            uploadBytes(storageRef, selectedImage).then((snapshot) => {
-                console.log('Uploaded a blob or file!');
-            })
+        if (!selectedImage) return;
+        const storage = getStorage();
+        const metadata = {
+            contentType: 'image/jpeg'
+        };
+        const storageRef = ref(storage, 'images/' + selectedImage.name);
+        const uploadTask = uploadBytesResumable(storageRef, selectedImage, metadata);
+
+        uploadTask.on('state_changed',
+            () => {},
+            (error) => {
+                // A full list of error codes is available at
+                // https://firebase.google.com/docs/storage/web/handle-errors
+                switch (error.code) {
+                    case 'storage/unauthorized':
+                        // User doesn't have permission to access the object
+                        break;
+                    case 'storage/canceled':
+                        // User canceled the upload
+                        break;
+
+                    // ...
+
+                    case 'storage/unknown':
+                        // Unknown error occurred, inspect error.serverResponse
+                        break;
+                }
+            },
+            () => {
+                // Upload completed successfully, now we can get the download URL
+                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                    console.log('File available at', downloadURL);
+                });
+            }
+        );
         }, [selectedImage]
     );
 
