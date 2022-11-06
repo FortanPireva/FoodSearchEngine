@@ -18,9 +18,14 @@ import Routes from "../../Utils/routes";
 
 const theme = createTheme();
 export default function Login() {
-  const { loggedIn, signin } = useAuth();
+  const { loggedIn, error, signin } = useAuth();
   const navigate = useNavigate();
 
+  React.useEffect(() => {
+    if (loggedIn) {
+      navigate(Routes.HOME);
+    }
+  }, [loggedIn]);
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -33,7 +38,7 @@ export default function Login() {
     let password = data.get("password");
     signin(email, password)
       .then((user) => {
-        navigate(Routes.HOME);
+        if (user) navigate(Routes.HOME);
       })
       .catch((err) => {});
   };
@@ -82,6 +87,7 @@ export default function Login() {
               id="password"
               autoComplete="current-password"
             />
+            {error && <Typography color={"#ff0000"}>{error}</Typography>}
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"

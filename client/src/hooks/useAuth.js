@@ -6,6 +6,7 @@ import {
   createUserWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
+import UserModel from "../models/UserModel";
 const firebase = Firebase.instance;
 
 console.log(firebase);
@@ -25,32 +26,64 @@ export const useAuth = () => {
 function useProvideAuth() {
   const [user, setUser] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
+  const [error, setError] = useState(null);
+
+  const setFirebaseError = (e) => {
+    let error = "";
+    switch (e.code) {
+      case "auth/user-not-found":
+        error = "Email not found";
+        break;
+      case "auth/email-already-exists":
+        error = "Email already exists";
+        break;
+      case "auth/invalid-password":
+        error = "Invalid password";
+        break;
+      default:
+        error = e.code;
+    }
+    setError(error);
+  };
   // Wrap any Firebase methods we want to use making sure ...
   // ... to save the user to state.
   const signin = (email, password) => {
-    return signInWithEmailAndPassword(firebase.auth(), email, password).then(
-      (response) => {
+    return signInWithEmailAndPassword(firebase.auth(), email, password)
+      .then((response) => {
+        console.log(response.user);
         setUser(response.user);
         setLoggedIn(true);
         return response.user;
-      }
-    );
+      })
+      .catch((e) => {
+        setFirebaseError(e);
+      });
   };
-  const signup = (email, password) => {
-    return createUserWithEmailAndPassword(
-      firebase.auth(),
-      email,
-      password
-    ).then((response) => {
-      setUser(response.user);
-      return response.user;
-    });
+  const      = (email, password, firstName, lastName) => {
+    return createUserWithEmailAndPassword(firebase.auth(), email, password)
+      .then((response) => {
+        let user = response.user;
+        user.firstName = firstName;
+        user.lastName = lastName;
+        let userModel = new UserModel(user);
+        userModel.save().then((savedUser) => {
+          setUser(savedUser);
+          return savedUser;
+        });
+      })
+      .catch((e) => {
+        setFirebaseError(e);
+      });
   };
   const signout = () => {
-    return signOut(firebase.auth()).then(() => {
-      setUser(false);
-      setLoggedIn(false);
-    });
+    return signOut(firebase.auth())
+      .then(() => {
+        setUser(false);
+        setLoggedIn(false);
+      })
+      .catch((e) => {
+        setFirebaseError(e);
+      });
   };
   const sendPasswordResetEmail = (email) => {
     return firebase
@@ -78,9 +111,11 @@ function useProvideAuth() {
         console.log("loggedin");
         setUser(user);
         setLoggedIn(true);
+        setError(null);
       } else {
         setUser(false);
         setLoggedIn(false);
+        setError(null);
       }
     });
     // Cleanup subscription on unmount
@@ -90,6 +125,7 @@ function useProvideAuth() {
   return {
     user,
     loggedIn,
+    error,
     signin,
     signup,
     signout,
