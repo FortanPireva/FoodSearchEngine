@@ -15,7 +15,17 @@ import Routes from "../../Utils/routes";
 import { useProducts } from "../../hooks/useProducts";
 import { ProductModel } from "../../models/ProductModel";
 import productCategories from "../../Utils/productCategories";
+import { ImageUpload } from "../../components/ImageUpload/ImageUpload";
+
 const theme = createTheme();
+
+const cate = [
+  "MEAT_AND_POULTRY",
+  "FISH_AND_SEAFOOD",
+  "MILK_AND_EGGS",
+  "YOGHURTS",
+  "READY_MEALS",
+];
 
 export const CreateProduct = () => {
   const { loggedIn, user } = useAuth();
@@ -23,23 +33,22 @@ export const CreateProduct = () => {
   const [inputType, setInputType] = useState("date");
   const [selectedCategory, setSelectedCategory] = useState("");
   const { addProduct } = useProducts();
+  const [imageUrl, setImageUrl] = useState(null);
+
   useEffect(() => {
     if (!loggedIn) navigate(Routes.LOGIN);
   }, [loggedIn]);
+
   const handleSubmit = (event) => {
+    if (!imageUrl) return;
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      name: data.get("name"),
-      category: data.get("category"),
-      price: data.get("price"),
-      expirydate: data.get("expirydate"),
-    });
     const product = new ProductModel({
-      image: "",
+      image: imageUrl,
       title: data.get("name"),
       category: data.get("category"),
       expDate: data.get("expirydate"),
+      description: data.get("description"),
       price: data.get("price"),
       userId: user.uid,
     });
@@ -73,6 +82,7 @@ export const CreateProduct = () => {
             noValidate
             sx={{ mt: 1 }}
           >
+            <ImageUpload setImageUrl={(value) => setImageUrl(value)} />
             <TextField
               margin="normal"
               required
@@ -97,12 +107,24 @@ export const CreateProduct = () => {
               autoComplete="category"
               autoFocus
             >
-              {productCategories.map((option) => (
+              {cate.map((option) => (
                 <option key={option} value={option}>
                   {option}
                 </option>
               ))}
             </TextField>
+
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="description"
+              label="Product Description"
+              name="description"
+              autoComplete="description"
+              autoFocus
+            />
+
             <TextField
               margin="normal"
               required
