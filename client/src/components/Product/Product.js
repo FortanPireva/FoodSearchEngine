@@ -32,9 +32,17 @@ const Product = (props) => {
     setExpanded(!expanded);
   }
 
+  function formattedDate() {
+      const date = new Date(props.productData.expDate);
+      return date.toDateString();
+  }
+
   return (
     <Card sx={{ maxWidth: 345 }}>
-      <CardHeader title={props.productData.title} />
+      <CardHeader
+          title={props.productData.title}
+          subheader={formattedDate()}
+      />
       <CardMedia
         component={"img"}
         image={props.productData.image}
