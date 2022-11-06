@@ -18,7 +18,7 @@ function App() {
       const firebase = Firebase.instance;
       setTimeout(() => {
         setInitialized(true);
-      }, 500);
+      }, 800);
     }
   }, []);
   return !initialized ? (

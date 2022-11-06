@@ -7,6 +7,8 @@ import {
   signOut,
 } from "firebase/auth";
 import UserModel from "../models/UserModel";
+import { where, collection, query, getDocs } from "firebase/firestore";
+import { dialogClasses } from "@mui/material";
 const firebase = Firebase.instance;
 
 console.log(firebase);
@@ -45,26 +47,49 @@ function useProvideAuth() {
     }
     setError(error);
   };
+
+  async function findUserById(uid) {
+    console.log(uid);
+    let q = query(
+      collection(firebase.firestore(), "users"),
+      where("userId", "==", uid)
+    );
+    let qSnap = await getDocs(q);
+    let doc = null;
+    qSnap.forEach((docum) => {
+      doc = {
+        id: docum.id,
+        ...docum.data(),
+      };
+    });
+    return doc;
+  }
   // Wrap any Firebase methods we want to use making sure ...
   // ... to save the user to state.
   const signin = (email, password) => {
     return signInWithEmailAndPassword(firebase.auth(), email, password)
-      .then((response) => {
+      .then(async (response) => {
         console.log(response.user);
-        setUser(response.user);
-        setLoggedIn(true);
-        return response.user;
+        let user = await findUserById(response.user.uid);
+        console.log(user);
+
+        if (user) {
+          setUser(user);
+          setLoggedIn(true);
+          return user;
+        }
       })
       .catch((e) => {
         setFirebaseError(e);
       });
   };
-  const signup = (email, password, firstName, lastName) => {
+  const signup = (email, password, firstName, lastName, phoneNumber) => {
     return createUserWithEmailAndPassword(firebase.auth(), email, password)
       .then((response) => {
         let user = response.user;
         user.firstName = firstName;
         user.lastName = lastName;
+        user.phoneNumber = phoneNumber;
         let userModel = new UserModel(user);
         userModel.save().then((savedUser) => {
           setUser(savedUser);
@@ -106,9 +131,9 @@ function useProvideAuth() {
   // ... component that utilizes this hook to re-render with the ...
   // ... latest auth object.
   useEffect(() => {
-    const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        console.log("loggedin");
+    const unsubscribe = firebase.auth().onAuthStateChanged(async (userImpl) => {
+      if (userImpl) {
+        let user = await findUserById(userImpl.uid);
         setUser(user);
         setLoggedIn(true);
         setError(null);
@@ -131,5 +156,6 @@ function useProvideAuth() {
     signout,
     sendPasswordResetEmail,
     confirmPasswordReset,
+    findUserById,
   };
 }
