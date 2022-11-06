@@ -41,6 +41,20 @@ function useProvideProduct() {
   // ... component that utilizes this hook to re-render with the ...
   // ... latest auth object.
 
+  async function addProduct(product) {
+    try {
+      console.log(product);
+      const productReference = await addDoc(
+        collection(firebase.firestore(), "products"),
+        product
+      );
+      console.log(productReference);
+      return true;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  }
   async function getLatestProducts(settings) {
     let limitSize = 10;
     if (settings) {
@@ -65,5 +79,6 @@ function useProvideProduct() {
   // Return the user object and auth methods
   return {
     getLatestProducts,
+    addProduct,
   };
 }

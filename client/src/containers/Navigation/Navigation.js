@@ -15,10 +15,10 @@ import AdbIcon from "@mui/icons-material/Adb";
 import { Logo } from "../../components/Logo/Logo";
 import menuLinks from "../../Utils/menuLinks";
 import AppButton from "../../components/AppButton/AppButton";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+import Routes from "../../Utils/routes";
+const settings = ["Profile", "Account", "Dashboard", "Logout", "Create Product"];
 
 function Navigation() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -42,7 +42,8 @@ function Navigation() {
 
   const handleCloseUserMenu = (element) => {
     console.log(element);
-    if (element == "Logout") signout().then(() => navigate("/login"));
+    if (element === "Logout") signout().then(() => navigate(Routes.LOGIN));
+    if (element === "Create Product") navigate(Routes.CREATEPRODUCT)
 
     setAnchorElUser(null);
   };

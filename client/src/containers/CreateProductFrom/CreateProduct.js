@@ -3,12 +3,7 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -17,6 +12,8 @@ import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { MenuItem } from "@mui/material";
 import { useAuth } from "../../hooks/useAuth";
 import Routes from "../../Utils/routes";
+import { useProducts } from "../../hooks/useProducts";
+import { ProductModel } from "../../models/ProductModel";
 const theme = createTheme();
 
 const cate = [
@@ -28,11 +25,11 @@ const cate = [
 ];
 
 export const CreateProduct = () => {
-  const { loggedIn } = useAuth();
+  const { loggedIn, user } = useAuth();
   const navigate = useNavigate();
   const [inputType, setInputType] = useState("date");
   const [selectedCategory, setSelectedCategory] = useState("");
-
+  const { addProduct } = useProducts();
   useEffect(() => {
     if (!loggedIn) navigate(Routes.LOGIN);
   }, [loggedIn]);
@@ -44,6 +41,18 @@ export const CreateProduct = () => {
       category: data.get("category"),
       price: data.get("price"),
       expirydate: data.get("expirydate"),
+    });
+    const product = new ProductModel({
+      image: "",
+      title: data.get("name"),
+      category: data.get("category"),
+      expDate: data.get("expirydate"),
+      price: data.get("price"),
+      userId: user.uid,
+    });
+    addProduct({ ...product }).then((result) => {
+      console.log(result);
+      if (result) navigate(Routes.HOME);
     });
   };
 
