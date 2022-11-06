@@ -14,9 +14,9 @@ import {
 import {ArrowDropDown} from "@mui/icons-material";
 
 const ExpandMore = styled((props) => {
-    const { expand, ...other } = props;
+    const {expand, ...other} = props;
     return <IconButton {...other} />;
-})(({ theme, expand }) => ({
+})(({theme, expand}) => ({
     transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
     marginLeft: 'auto',
     transition: theme.transitions.create('transform', {
@@ -32,8 +32,11 @@ const Product = (props) => {
     }
 
     return (
-        <Card sx={{ maxWidth: 345 }}>
-            <CardHeader title={props.productData.title}/>
+        <Card sx={{maxWidth: 345}}>
+            <CardHeader
+                title={props.productData.title}
+                subheader={props.productData.category}
+            />
             <CardMedia
                 component={"img"}
                 image={props.productData.image}
@@ -51,7 +54,7 @@ const Product = (props) => {
                     aria-expanded={expanded}
                     aria-label="show more"
                 >
-                    <ArrowDropDown />
+                    <ArrowDropDown/>
                 </ExpandMore>
             </CardActions>
             <Collapse in={expanded} timeout="auto" unmountOnExit>
