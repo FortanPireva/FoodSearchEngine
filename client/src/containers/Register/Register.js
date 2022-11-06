@@ -107,6 +107,7 @@ export default function Register() {
                             margin="normal"
                             required
                             fullWidth
+                            type="number"
                             id="phoneNumber"
                             label="Phone Number"
                             name="phoneNumber"
