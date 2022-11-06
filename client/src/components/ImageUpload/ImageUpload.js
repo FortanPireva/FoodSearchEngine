@@ -1,7 +1,19 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
+import {getStorage, uploadBytes, ref} from "firebase/storage"
+import Firebase from "../../firebase/firebase";
 
+const firebase = Firebase.instance;
 export const ImageUpload = () => {
     const [selectedImage, setSelectedImage] = useState(null);
+
+    useEffect(() => {
+            const storage = getStorage();
+            const storageRef = ref(storage, 'some-child');
+            uploadBytes(storageRef, selectedImage).then((snapshot) => {
+                console.log('Uploaded a blob or file!');
+            })
+        }, [selectedImage]
+    );
 
     return (
         <div>
@@ -13,7 +25,6 @@ export const ImageUpload = () => {
                 </div>
             )}
             <br/>
-
             <br/>
             <input
                 type="file"
