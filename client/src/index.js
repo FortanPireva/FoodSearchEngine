@@ -5,12 +5,15 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { ProvideAuth } from "./hooks/useAuth";
+import { ProvideProducts } from "./hooks/useProducts";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
     <ProvideAuth>
-      <App />
+      <ProvideProducts>
+        <App />
+      </ProvideProducts>
     </ProvideAuth>
   </BrowserRouter>
 );
