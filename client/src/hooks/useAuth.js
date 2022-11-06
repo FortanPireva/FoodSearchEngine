@@ -59,7 +59,7 @@ function useProvideAuth() {
         setFirebaseError(e);
       });
   };
-  const      = (email, password, firstName, lastName) => {
+  const signup = (email, password, firstName, lastName) => {
     return createUserWithEmailAndPassword(firebase.auth(), email, password)
       .then((response) => {
         let user = response.user;
