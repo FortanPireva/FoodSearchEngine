@@ -14,6 +14,7 @@ import { useAuth } from "../../hooks/useAuth";
 import Routes from "../../Utils/routes";
 import { useProducts } from "../../hooks/useProducts";
 import { ProductModel } from "../../models/ProductModel";
+import {ImageUpload} from "../../components/ImageUpload/ImageUpload";
 const theme = createTheme();
 
 const cate = [
@@ -80,7 +81,8 @@ export const CreateProduct = () => {
             noValidate
             sx={{ mt: 1 }}
           >
-            <TextField
+            <ImageUpload/>
+                        <TextField
               margin="normal"
               required
               fullWidth
