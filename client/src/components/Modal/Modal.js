@@ -14,7 +14,10 @@ import {
 import { useState } from "react";
 import AppButton from "../AppButton/AppButton";
 import productCategories from "../../Utils/productCategories";
-
+import Firebase from "../../firebase/firebase";
+import { setDoc, doc } from "firebase/firestore";
+import { useAuth } from "../../hooks/useAuth";
+const firebase = Firebase.instance;
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -26,6 +29,7 @@ const MenuProps = {
   },
 };
 const CustomModal = ({ open, onClose }) => {
+  const { user } = useAuth();
   const [selectedCategories, setSelectedCategories] = useState([]);
   const handleChange = (event) => {
     const {
@@ -35,6 +39,20 @@ const CustomModal = ({ open, onClose }) => {
       // On autofill we get a stringified value.
       typeof value === "string" ? value.split(",") : value
     );
+  };
+  const handleClick = () => {
+    productCategories.map((cat) => {
+      setDoc(
+        doc(firebase.firestore(), "userNotifications", user.userId + cat),
+        {
+          userId: user.userId,
+          phoneNumber: user.phoneNumber,
+          category: cat,
+          deleted: !selectedCategories.includes(cat),
+        }
+      );
+      onClose();
+    });
   };
   return (
     <Modal
@@ -78,7 +96,7 @@ const CustomModal = ({ open, onClose }) => {
             ))}
           </Select>
         </FormControl>
-        <AppButton variant="contained" color="primary">
+        <AppButton variant="contained" color="primary" onClick={handleClick}>
           Save Changes
         </AppButton>
       </Box>

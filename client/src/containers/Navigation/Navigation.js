@@ -18,12 +18,19 @@ import AppButton from "../../components/AppButton/AppButton";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import Routes from "../../Utils/routes";
-const settings = ["Profile", "Account", "Dashboard", "Logout", "Create Product"];
+const settings = [
+  "Profile",
+  "Account",
+  "Dashboard",
+  "Logout",
+  "Create Product",
+];
 
 function Navigation() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const { loggedIn, signout } = useAuth();
+  const { loggedIn, signout, user } = useAuth();
+  console.log(user);
   const navigate = useNavigate();
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -43,7 +50,7 @@ function Navigation() {
   const handleCloseUserMenu = (element) => {
     console.log(element);
     if (element === "Logout") signout().then(() => navigate(Routes.LOGIN));
-    if (element === "Create Product") navigate(Routes.CREATEPRODUCT)
+    if (element === "Create Product") navigate(Routes.CREATEPRODUCT);
 
     setAnchorElUser(null);
   };
@@ -145,7 +152,14 @@ function Navigation() {
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                  <Avatar
+                    alt="Remy Sharp"
+                    src={
+                      !user
+                        ? "/static/images/avatar/2.jpg"
+                        : `https://ui-avatars.com/api/?name=${user.firstName}+${user.lastName}}`
+                    }
+                  />
                 </IconButton>
               </Tooltip>
               <Menu

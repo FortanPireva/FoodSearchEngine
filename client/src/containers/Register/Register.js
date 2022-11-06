@@ -17,6 +17,7 @@ import { Link as RouterLink } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import Routes from "../../Utils/routes";
+
 const theme = createTheme();
 
 export default function Register() {
@@ -37,7 +38,8 @@ export default function Register() {
       data.get("email"),
       data.get("password"),
       data.get("firstName"),
-      data.get("lastName")
+      data.get("lastName"),
+      data.get("phoneNumber")
     )
       .then((user) => {
         navigate(Routes.LOGIN);
@@ -87,6 +89,16 @@ export default function Register() {
               label="Last Name"
               name="lastName"
               autoComplete="lastName"
+              autoFocus
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="phoneNumber"
+              label="Phone Number"
+              name="phoneNumber"
+              autoComplete="phoneNumber"
               autoFocus
             />
             <TextField
