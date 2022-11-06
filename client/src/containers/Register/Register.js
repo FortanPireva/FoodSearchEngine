@@ -20,7 +20,7 @@ import Routes from "../../Utils/routes";
 const theme = createTheme();
 
 export default function Register() {
-  const { signup } = useAuth();
+  const { signup, error } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = (event) => {
@@ -29,9 +29,16 @@ export default function Register() {
     console.log({
       email: data.get("email"),
       password: data.get("password"),
+      firstName: data.get("firstName"),
+      lastName: data.get("lastName"),
     });
 
-    signup(data.get("email"), data.get("password"))
+    signup(
+      data.get("email"),
+      data.get("password"),
+      data.get("firstName"),
+      data.get("lastName")
+    )
       .then((user) => {
         navigate(Routes.LOGIN);
       })
@@ -106,6 +113,8 @@ export default function Register() {
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             /> */}
+            {error && <Typography color={"#ff0000"}>{error}</Typography>}
+
             <Button
               type="submit"
               fullWidth

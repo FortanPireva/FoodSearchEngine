@@ -6,6 +6,7 @@ import {
   createUserWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
+import UserModel from "../models/UserModel";
 const firebase = Firebase.instance;
 
 console.log(firebase);
@@ -49,6 +50,7 @@ function useProvideAuth() {
   const signin = (email, password) => {
     return signInWithEmailAndPassword(firebase.auth(), email, password)
       .then((response) => {
+        console.log(response.user);
         setUser(response.user);
         setLoggedIn(true);
         return response.user;
@@ -57,11 +59,17 @@ function useProvideAuth() {
         setFirebaseError(e);
       });
   };
-  const signup = (email, password) => {
+  const      = (email, password, firstName, lastName) => {
     return createUserWithEmailAndPassword(firebase.auth(), email, password)
       .then((response) => {
-        setUser(response.user);
-        return response.user;
+        let user = response.user;
+        user.firstName = firstName;
+        user.lastName = lastName;
+        let userModel = new UserModel(user);
+        userModel.save().then((savedUser) => {
+          setUser(savedUser);
+          return savedUser;
+        });
       })
       .catch((e) => {
         setFirebaseError(e);

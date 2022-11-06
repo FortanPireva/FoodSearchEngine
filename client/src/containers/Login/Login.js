@@ -21,6 +21,11 @@ export default function Login() {
   const { loggedIn, error, signin } = useAuth();
   const navigate = useNavigate();
 
+  React.useEffect(() => {
+    if (loggedIn) {
+      navigate(Routes.HOME);
+    }
+  }, [loggedIn]);
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
