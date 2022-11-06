@@ -3,7 +3,7 @@ import {getStorage, uploadBytesResumable, ref, getDownloadURL} from "firebase/st
 import Firebase from "../../firebase/firebase";
 
 const firebase = Firebase.instance;
-export const ImageUpload = () => {
+export const ImageUpload = (props) => {
     const [selectedImage, setSelectedImage] = useState(null);
 
     useEffect(() => {
@@ -12,7 +12,9 @@ export const ImageUpload = () => {
         const metadata = {
             contentType: 'image/jpeg'
         };
-        const storageRef = ref(storage, 'images/' + selectedImage.name);
+
+        // todo: do something with 'selectedImage.name' so that images in storage don't replace one another
+        const storageRef = ref(storage, selectedImage.name);
         const uploadTask = uploadBytesResumable(storageRef, selectedImage, metadata);
 
         uploadTask.on('state_changed',
@@ -39,6 +41,7 @@ export const ImageUpload = () => {
                 // Upload completed successfully, now we can get the download URL
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
                     console.log('File available at', downloadURL);
+                    props.setImageUrl(downloadURL);
                 });
             }
         );

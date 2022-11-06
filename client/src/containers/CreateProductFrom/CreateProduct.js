@@ -32,20 +32,18 @@ export const CreateProduct = () => {
     const [inputType, setInputType] = useState("date");
     const [selectedCategory, setSelectedCategory] = useState("");
     const {addProduct} = useProducts();
+    const [imageUrl, setImageUrl] = useState(null);
+
     useEffect(() => {
         if (!loggedIn) navigate(Routes.LOGIN);
     }, [loggedIn]);
+
     const handleSubmit = (event) => {
+        if (!imageUrl) return;
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            name: data.get("name"),
-            category: data.get("category"),
-            price: data.get("price"),
-            expirydate: data.get("expirydate"),
-        });
         const product = new ProductModel({
-            image: "",
+            image: imageUrl,
             title: data.get("name"),
             category: data.get("category"),
             expDate: data.get("expirydate"),
@@ -82,7 +80,7 @@ export const CreateProduct = () => {
                         noValidate
                         sx={{mt: 1}}
                     >
-                        <ImageUpload/>
+                        <ImageUpload setImageUrl={(value) => setImageUrl(value)}/>
                         <TextField
                             margin="normal"
                             required
